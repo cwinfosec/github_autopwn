@@ -48,10 +48,11 @@ def main(args):
             if this_req.status_code == 200:
                 print("[+] Found Potentially Vulnerable %s Code In The Following Files!" % args.query)
                 for key in json_data["items"]:
-                    pprint(key["html_url"])
+                    try:
+                        pprint(key["html_url"])
 
-        except KeyError:
-            print("[!] Didn't find anything. Moving on!")
+                    except KeyError:
+                        print("[!] Didn't find anything. Moving on!")
 
         except Exception as e:
             print(repr(e))
@@ -68,16 +69,21 @@ def main(args):
                 json_data = json.loads(this_req.content)
                 print("[!] Got status code: %d" % this_req.status_code)
                 if this_req.status_code == 200:
-                    print("[+] Found Potentially Vulnerable Code In The Following Files!")
-                    pprint(key["html_url"])
-                    time.sleep(0.1)
 
-            except KeyError:
-                print("[!] Didn't find anything. Moving on!")
+                    print("[+] Found Potentially %s Vulnerable Code In The Following Files!" % payload[0])
+
+                    for key in json_data["items"]:
+
+                        try:
+
+                            pprint(key["html_url"])
+                            time.sleep(0.1)
+
+                        except KeyError as e:
+                            print("[!] Didn't find anything. Moving on!")
 
             except Exception as e:
                 print(repr(e))
-
 
 if __name__ in "__main__":
 
