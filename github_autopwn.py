@@ -67,9 +67,8 @@ def main(args):
                 this_req = requests.get(github_api, verify=True)
                 json_data = json.loads(this_req.content)
                 print("[!] Got status code: %d" % this_req.status_code)
-                print("[+] Found Potentially Vulnerable %s Code In The Following Files!" % payload[0])
-
-                for key in json_data["items"]:
+                if this_req.status_code == 200:
+                    print("[+] Found Potentially Vulnerable Code In The Following Files!")
                     pprint(key["html_url"])
                     time.sleep(0.1)
 
