@@ -81,4 +81,5 @@ def main(args):
 
 if __name__ in "__main__":
 
-    args = parse_o
+    args = parse_options()
+    main(args)
