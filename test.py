@@ -19,7 +19,7 @@ def main(args):
     try:
 
         github_api = ("https://api.github.com/search/code?q=user:{} {}").format(args.org, args.query)
-        this_req = requests.get(github_api, verify=False)
+        this_req = requests.get(github_api, verify=True)
         json_data = json.loads(this_req.content)
         print(this_req.status_code)
         pprint(json_data)
