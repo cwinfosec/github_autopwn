@@ -15,7 +15,7 @@ def parse_options():
 
     global parser
     formatter = lambda prog: argparse.HelpFormatter(prog,max_help_position=50)
-    parser = argparse.ArgumentParser(description='Use -sp to bypass SNMP ACL\'s that don\'t specify deny ip any any', formatter_class=formatter)
+    parser = argparse.ArgumentParser(description='Github Autopwn - Static Code Analysis Scraper', formatter_class=formatter)
     parser.add_argument("-q", "--query", type=str, help="Bad code to scrape for", required=False)
     parser.add_argument("-o", "--org", type=str, help="Organization to search bad code in e.g. Microsoft", required=True)
     parser.add_argument("-a", "--autopwn", help="Find all the bugs", action="store_true", required=False)
