@@ -4,9 +4,10 @@ Description: Github Autopwn - Github Scraper For Static Code Analysis
 Author: Cody Winkler (twitter: c2thewinkler | github: m0rph-1)
 Date: 2/5/2020
 """
-
+import time
 import requests
 import json
+import sys
 from indicators import *
 from pprint import pprint
 import argparse
@@ -17,30 +18,43 @@ def parse_options():
     formatter = lambda prog: argparse.HelpFormatter(prog,max_help_position=50)
     parser = argparse.ArgumentParser(description='Github Autopwn - Static Code Analysis Scraper', formatter_class=formatter)
     parser.add_argument("-q", "--query", type=str, help="Bad code to scrape for", required=False)
-    parser.add_argument("-o", "--org", type=str, help="Organization to search bad code in e.g. Microsoft", required=True)
+    parser.add_argument("-o", "--org", type=str, help="Organization to search bad code in e.g. Microsoft", required=False)
     parser.add_argument("-a", "--autopwn", help="Find all the bugs", action="store_true", required=False)
+    parser.add_argument("-crl", "--check-rate-limit", dest="rate", help="Check current API request rate limit", action="store_true", required=False)
     args = parser.parse_args()
     return args
 
+def check_rate_limit():
+
+    this_req = requests.get("https://api.github.com/rate_limit", verify=True)
+    json_data = json.loads(this_req.content)
+    pprint(json_data["rate"])
+    sys.exit()
+
 def main(args):
 
+    if args.rate:
+        check_rate_limit()
+
     if args.query:
+
         print("[!] Searching for payload: %s" % args.query)
+
         try:
 
             github_api = ("https://api.github.com/search/code?q=user:{} {}").format(args.org, args.query)
             this_req = requests.get(github_api, verify=True)
             json_data = json.loads(this_req.content)
-            print("[!] Got status code: %d" % this_req.status_code)
-            print("[+] Found Potentially Vulnerable Code In The Following Files!")
-            for key in json_data["items"]:
-                pprint(key["html_url"])
-
-        except Exception as e:
-            print(repr(e))
+            if this_req.status_code == 200:
+                print("[+] Found Potentially Vulnerable Code In The Following Files!")
+                for key in json_data["items"]:
+                    pprint(key["html_url"])
 
         except KeyError:
             print("[!] Didn't find anything. Moving on!")
+
+        except Exception as e:
+            print(repr(e))
 
     if args.autopwn:
 
@@ -57,6 +71,10 @@ def main(args):
 
                 for key in json_data["items"]:
                     pprint(key["html_url"])
+                    time.sleep(0.1)
+
+            except KeyError:
+                print("[!] Didn't find anything. Moving on!")
 
             except Exception as e:
                 print(repr(e))
@@ -64,5 +82,4 @@ def main(args):
 
 if __name__ in "__main__":
 
-    args = parse_options()
-    main(args)
+    args = parse_o
