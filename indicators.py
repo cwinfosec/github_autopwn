@@ -3,7 +3,9 @@
 # Source: https://github.com/swisskyrepo/Vulny-Code-Static-Analysis
 # /!\ Detection Format (.*)function($vuln)(.*) matched by payload[0]+regex_indicators
 regex_indicators = '\\((.*?)(\\$_GET\\[.*?\\]|\\$_FILES\\[.*?\\]|\\$_POST\\[.*?\\]|\\$_REQUEST\\[.*?\\]|\\$_COOKIES\\[.*?\\]|\\$_SESSION\\[.*?\\]|\\$(?!this|e-)[a-zA-Z0-9_,]*)(.*?)\\)'
-                                                                                                                       
+# Source: Tib3rius
+test_regex = '\$_(GET|FILES|POST|REQUEST|COOKIES|SESSION)\[.*?\]'
+
 # Function_Name:String, Vulnerability_Name:String, Protection_Function:Array
 payloads = [
                                                                                                                        
