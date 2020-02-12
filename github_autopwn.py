@@ -18,7 +18,7 @@ def parse_options():
     formatter = lambda prog: argparse.HelpFormatter(prog,max_help_position=50)
     parser = argparse.ArgumentParser(description='Github Autopwn - Static Code Analysis Scraper', formatter_class=formatter)
     parser.add_argument("-q", "--query", type=str, help="Bad code to scrape for", required=False)
-    parser.add_argument("-o", "--org", type=str, help="Organization to search bad code in e.g. Microsoft", required=False)
+    parser.add_argument("-o", "--org", type=str, help="Organization to search bad code in e.g. Microsoft", required=True)
     parser.add_argument("-a", "--autopwn", help="Find all the bugs", action="store_true", required=False)
     parser.add_argument("-crl", "--check-rate-limit", dest="rate", help="Check current API request rate limit", action="store_true", required=False)
     args = parser.parse_args()
