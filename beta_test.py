@@ -46,7 +46,7 @@ def check_rate_limit():
     this_req = requests.get("https://api.github.com/rate_limit", verify=True)
     json_data = json.loads(this_req.content)
     pprint(json_data["rate"])
-    sys.exit()
+    return
 
 def main(args):
 
@@ -79,6 +79,10 @@ def main(args):
                     except KeyError:
                         print("[!] Didn't find anything. Moving on!")
 
+            if this_req.status_code != 200:
+                print("[-] Check rate limit.")
+                pass
+
         except Exception as e:
             print(repr(e))
 
@@ -102,10 +106,16 @@ def main(args):
                         try:
 
                             pprint(key["html_url"])
-                            time.sleep(0.1)
+                            time.sleep(0.5)
 
                         except KeyError as e:
                             print("[!] Didn't find anything. Moving on!")
+
+                if this_req.status_code != 200:
+                    print("[-] Check rate limit. Sleeping for 15 seconds.")
+                    check_rate_limit()
+                    time.sleep(15)
+                    pass
 
             except Exception as e:
                 print(repr(e))
