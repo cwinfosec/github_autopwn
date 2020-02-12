@@ -18,7 +18,7 @@ def parse_options():
     formatter = lambda prog: argparse.HelpFormatter(prog,max_help_position=50)
     parser = argparse.ArgumentParser(description='Github Autopwn - Static Code Analysis Scraper', formatter_class=formatter)
     parser.add_argument("-q", "--query", type=str, help="Bad code to scrape for", required=False)
-    parser.add_argument("-o", "--org", type=str, help="Organization/User to search bad code in e.g. Microsoft", required=True)
+    parser.add_argument("-o", "--org", type=str, help="Organization to search bad code in e.g. Microsoft", required=True)
     parser.add_argument("-a", "--autopwn", help="Find all the bugs", action="store_true", required=False)
     parser.add_argument("-crl", "--check-rate-limit", dest="rate", help="Check current API request rate limit", action="store_true", required=False)
     args = parser.parse_args()
@@ -29,7 +29,7 @@ def check_rate_limit():
     this_req = requests.get("https://api.github.com/rate_limit", verify=True)
     json_data = json.loads(this_req.content)
     pprint(json_data["rate"])
-    sys.exit()
+    return
 
 def main(args):
 
@@ -54,6 +54,10 @@ def main(args):
                     except KeyError:
                         print("[!] Didn't find anything. Moving on!")
 
+            if this_req.status_code != 200:
+                print("[-] Check rate limit.")
+                pass
+
         except Exception as e:
             print(repr(e))
 
@@ -77,10 +81,16 @@ def main(args):
                         try:
 
                             pprint(key["html_url"])
-                            time.sleep(0.1)
+                            time.sleep(0.5)
 
                         except KeyError as e:
                             print("[!] Didn't find anything. Moving on!")
+
+                if this_req.status_code != 200:
+                    print("[-] Check rate limit. Sleeping for 15 seconds.")
+                    check_rate_limit()
+                    time.sleep(15)
+                    pass
 
             except Exception as e:
                 print(repr(e))
