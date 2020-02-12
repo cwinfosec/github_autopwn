@@ -5,8 +5,30 @@ Github Scraper For Static Code Analysis
 
 ![screenshot](autopwn.PNG)
 
+### Examples
+
+Search for all instances of `mysql_query()` in Microsoft repositories:
+```
+python3 github_autopwn.py --org Microsoft --query "mysql_query"
+python3 github_autopwn.py -o Microsoft -q "mysql_query"
+```
+
+Search for all instances of every indicator in indicator.py in Github repositories:
+```
+python3 github_autopwn.py --org Github --autopwn
+python3 github_autopwn.py -o Github -a
+```
+
+### Beta
+
+Attempt printing out all code snippets for found indicators in all Github repositories:
+```
+python3 beta_test.py --org Github --autopwn --get-code
+python3 beta_test.py -o Github -a -g
+```
+
 # To-do
 - (maybe) add function to open an issue with author if a bug is found
-- Build regex to find code-snippets in detected files
+- Fix regex to find code-snippets in detected files
 - Explore searchcode.com
 - Build optional auth to search globally/add to rate-limit
