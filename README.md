@@ -19,6 +19,8 @@ python3 github_autopwn.py --org Github --autopwn
 python3 github_autopwn.py -o Github -a
 ```
 
+Indicators are not 100% accurate, so there is still a need for manual investigative effort to confirm if a bug exists or not. 
+
 ### Beta
 
 Attempt printing out all code snippets for found indicators in all Github repositories:
