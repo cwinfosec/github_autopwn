@@ -2,7 +2,7 @@
 """
 Description: Github Autopwn - Github Scraper For Static Code Analysis
 Author: Cody Winkler (twitter: c2thewinkler | github: m0rph-1)
-Date: 2/5/2020
+Date: 2/12/2020
 """
 import time
 import requests
