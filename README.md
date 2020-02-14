@@ -5,6 +5,8 @@ Github Scraper For Static Code Analysis
 
 ![screenshot](autopwn.PNG)
 
+This script is only able to be ran against specific user repositories in its current form. 
+
 ### Examples
 
 Search for all instances of `mysql_query()` in Microsoft repositories:
