@@ -13,20 +13,20 @@ python3 github_autopwn.py --org Microsoft --query "mysql_query"
 python3 github_autopwn.py -o Microsoft -q "mysql_query"
 ```
 
-Search for all instances of every indicator in indicator.py in Github repositories:
+Search for all instances of every indicator in indicator.py in Docker repositories:
 ```
-python3 github_autopwn.py --org Github --autopwn
-python3 github_autopwn.py -o Github -a
+python3 github_autopwn.py --org Docker --autopwn
+python3 github_autopwn.py -o Docker -a
 ```
 
 Indicators are not 100% accurate, so there is still a need for manual investigative effort to confirm if a bug exists or not. 
 
 ### Beta
 
-Attempt printing out all code snippets for found indicators in all Github repositories:
+Attempt printing out all code snippets for found indicators in all Google repositories:
 ```
-python3 beta_test.py --org Github --autopwn --get-code
-python3 beta_test.py -o Github -a -g
+python3 beta_test.py --org Google --autopwn --get-code
+python3 beta_test.py -o Google -a -g
 ```
 
 # To-do
