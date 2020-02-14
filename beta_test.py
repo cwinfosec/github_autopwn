@@ -8,7 +8,8 @@ import time
 import requests
 import json
 import sys
-import re
+# import re 
+from termcolor import colored
 from base64 import b64decode
 from indicators import *
 from pprint import pprint
@@ -32,6 +33,19 @@ def get_code_snippet(git_url_key):
     this_req = requests.get(git_url_key, verify=True)
     json_data = json.loads(this_req.content)
     if this_req.status_code == 200:
+        repo_code = str(b64decode(json_data["content"]).decode('utf-8')).split('\n')
+        for payload in payloads:
+            for i in range(len(repo_code)):
+                 if payload[0] + "(" in repo_code[i]:
+                     print(str(repo_code[i]))
+
+"""
+Legacy function if I decide to go back to it
+def get_code_snippet(git_url_key):
+
+    this_req = requests.get(git_url_key, verify=True)
+    json_data = json.loads(this_req.content)
+    if this_req.status_code == 200:
         repo_code_dirty = b64decode(json_data["content"]).decode('utf-8')
         repo_code = str(repo_code_dirty).replace("\\n", "\n").replace("\\t","\t").replace("\\","")
         for payload in payloads:
@@ -40,6 +54,7 @@ def get_code_snippet(git_url_key):
             if matches:
                 for i in enumerate(matches):
                     print(str(i).replace("\\",""))
+"""
 
 def check_rate_limit():
 
@@ -53,53 +68,64 @@ def main(args):
     separator = "-"*100
 
     if args.rate:
+
         check_rate_limit()
 
     if args.query:
 
-        print("[!] Searching for payload: %s" % args.query)
+        print(colored("[+] Searching for payload: %s" % args.query, "green"))
 
         try:
 
             github_api = ("https://api.github.com/search/code?q=user:{} {}").format(args.org, args.query)
             this_req = requests.get(github_api, verify=True)
             json_data = json.loads(this_req.content)
+
             if this_req.status_code == 200:
-                print("[+] Found Potentially Vulnerable %s Code In The Following Files!" % args.query)
+
                 for key in json_data["items"]:
+
                     try:
+
                         print(separator)
+                        print(colored("[+] Found Potentially Vulnerable %s Code In The Following File!" % args.query, "green"))
                         pprint(key["html_url"])
+                        print(separator)
 
                         if args.get_code:
 
+                            print(colored("This should be printed if -g is specified", "yellow"))
                             git_url_key = key["git_url"]
                             get_code_snippet(git_url_key)
 
                     except KeyError:
-                        print("[!] Didn't find anything. Moving on!")
+                        print(colored("[-] Didn't find anything. Moving on!", "red"))
 
             if this_req.status_code != 200:
-                print("[-] Check rate limit.")
+
+                print(colored("[!] Check rate limit.", "yellow"))
                 pass
 
         except Exception as e:
+
             print(repr(e))
 
     if args.autopwn:
 
         for payload in payloads:
-            print("[!] Searching for payload: %s" % payload[0])
+
+            print(colored("[+] Searching for payload: %s" % payload[0], "green"))
 
             try:
 
                 github_api = ("https://api.github.com/search/code?q=user:{} {}").format(args.org, payload[0])
                 this_req = requests.get(github_api, verify=True)
                 json_data = json.loads(this_req.content)
-                print("[!] Got status code: %d" % this_req.status_code)
+                print(colored("[!] Got status code: %d" % this_req.status_code, "yellow"))
+
                 if this_req.status_code == 200:
 
-                    print("[+] Found Potentially %s Vulnerable Code In The Following Files!" % payload[0])
+                    print(colored("[+] Found Potentially %s Vulnerable Code In The Following Files!" % payload[0], "green"))
 
                     for key in json_data["items"]:
 
@@ -108,16 +134,24 @@ def main(args):
                             pprint(key["html_url"])
                             time.sleep(0.5)
 
+                            if args.get_code:
+
+                                git_url_key = key["git_url"]
+                                get_code_snippet(git_url_key)
+
                         except KeyError as e:
-                            print("[!] Didn't find anything. Moving on!")
+
+                            print(colored("[-] Didn't find anything. Moving on!", "red"))
 
                 if this_req.status_code != 200:
-                    print("[-] Check rate limit. Sleeping for 15 seconds.")
+
+                    print(colored("[!] Check rate limit. Sleeping for 15 seconds.", "yellow"))
                     check_rate_limit()
                     time.sleep(15)
                     pass
 
             except Exception as e:
+
                 print(repr(e))
 
 if __name__ in "__main__":
