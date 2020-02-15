@@ -3,7 +3,7 @@ Github Scraper For Static Code Analysis
 
 ## Usage:
 
-![screenshot](autopwn.PNG)
+![screenshot](/images/autopwn.PNG)
 
 This script is only able to be ran against specific user repositories in its current form. 
 
@@ -25,11 +25,15 @@ Indicators are not 100% accurate, so there is still a need for manual investigat
 
 ### Beta
 
-Attempt printing out all code snippets for found indicators in all Google repositories:
+Attempt printing out all code snippets for found indicators in all of [ethicalhack3r](https://github.com/ethicalhack3r)'s repositories:
 ```
-python3 beta_test.py --org Google --autopwn --get-code
-python3 beta_test.py -o Google -a -g
+python3 beta_test.py --org ethicalhack3r --autopwn --get-code
+python3 beta_test.py -o ethicalhack3r -a -g
 ```
+
+Example of this functionality using the --query argument:
+
+![screenshot](/images/autopwn2.PNG)
 
 # To-do
 - (maybe) add function to open an issue with author if a bug is found
