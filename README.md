@@ -37,6 +37,6 @@ Example of this functionality using the --query argument:
 
 # To-do
 - (maybe) add function to open an issue with author if a bug is found
-- Fix regex to find code-snippets in detected files
-- Explore searchcode.com
+- Fix regex finding code-snippets in detected files so results are not duplicated
+- Explore searchcode.com functionality
 - Build optional auth to search globally/add to rate-limit
