@@ -35,6 +35,10 @@ Example of this functionality using the --query argument:
 
 ![screenshot](/images/autopwn2.PNG)
 
+## Resources
+
+[indicators.py](/indicators.py) was taken from [swissykyrepo](https://github.com/swisskyrepo). If you would like to find out more about his Vulny-Code-Static-Analysis project you can reach him on his twitter here: [pentest_swissky](https://twitter.com/pentest_swissky)
+
 # To-do
 - (maybe) add function to open an issue with author if a bug is found
 - Fix regex finding code-snippets in detected files so results are not duplicated
