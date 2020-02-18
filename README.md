@@ -23,12 +23,12 @@ python3 github_autopwn.py -o Docker -a
 
 Indicators are not 100% accurate, so there is still a need for manual investigative effort to confirm if a bug exists or not. 
 
-### Beta
+### Code Snippets
 
 Attempt printing out all code snippets for found indicators in all of [ethicalhack3r](https://github.com/ethicalhack3r)'s repositories:
 ```bash
-python3 beta_test.py --org ethicalhack3r --autopwn --get-code
-python3 beta_test.py -o ethicalhack3r -a -g
+python3 github_autopwn.py --org ethicalhack3r --autopwn --get-code
+python3 github_autopwn.py -o ethicalhack3r -a -g
 ```
 
 Example of this functionality using the --query argument:
