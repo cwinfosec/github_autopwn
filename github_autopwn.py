@@ -4,10 +4,12 @@ Description: Github Autopwn - Github Scraper For Static Code Analysis
 Author: Cody Winkler (twitter: c2thewinkler | github: m0rph-1)
 Date: 2/12/2020
 """
+import os
 import time
 import requests
 import json
 import sys
+from dotenv import load_dotenv
 from termcolor import colored
 from base64 import b64decode
 from indicators import *
@@ -27,9 +29,8 @@ def parse_options():
     args = parser.parse_args()
     return args
 
-def get_code_snippet(git_url_key):
-
-    this_req = requests.get(git_url_key, verify=True)
+def get_code_snippet(git_url_key, headers):
+    this_req = requests.get(git_url_key, verify=True, headers=headers)
     json_data = json.loads(this_req.content)
     if this_req.status_code == 200:
         repo_code = str(b64decode(json_data["content"]).decode('utf-8')).split('\n')
@@ -38,14 +39,25 @@ def get_code_snippet(git_url_key):
                  if payload[0] + "(" in repo_code[i]:
                      print(str(repo_code[i]))
 
-def check_rate_limit():
-
-    this_req = requests.get("https://api.github.com/rate_limit", verify=True)
+def check_rate_limit(headers):
+    this_req = requests.get("https://api.github.com/rate_limit", verify=True, headers=headers)
     json_data = json.loads(this_req.content)
     pprint(json_data["rate"])
     return
 
 def main(args):
+
+    load_dotenv()
+
+    api_key = os.getenv("API_KEY")
+
+    if api_key == None or api_key == '':
+        print(colored("[!] API key is not set. Specify it in .env.", "red"))
+        exit(1)
+
+    headers = {
+        "Authorization": f"Bearer {api_key}"
+    }
 
     separator = "-"*100
 
@@ -60,7 +72,7 @@ def main(args):
         try:
 
             github_api = ("https://api.github.com/search/code?q=user:{} {}").format(args.org, args.query)
-            this_req = requests.get(github_api, verify=True)
+            this_req = requests.get(github_api, verify=True, headers=headers)
             json_data = json.loads(this_req.content)
 
             if this_req.status_code == 200:
@@ -78,7 +90,7 @@ def main(args):
 
                             print(colored("This should be printed if -g is specified", "yellow"))
                             git_url_key = key["git_url"]
-                            get_code_snippet(git_url_key)
+                            get_code_snippet(git_url_key, headers)
 
                     except KeyError:
                         print(colored("[-] Didn't find anything. Moving on!", "red"))
@@ -101,7 +113,7 @@ def main(args):
             try:
 
                 github_api = ("https://api.github.com/search/code?q=user:{} {}").format(args.org, payload[0])
-                this_req = requests.get(github_api, verify=True)
+                this_req = requests.get(github_api, verify=True, headers=headers)
                 json_data = json.loads(this_req.content)
                 print(colored("[!] Got status code: %d" % this_req.status_code, "yellow"))
 
@@ -119,7 +131,7 @@ def main(args):
                             if args.get_code:
 
                                 git_url_key = key["git_url"]
-                                get_code_snippet(git_url_key)
+                                get_code_snippet(git_url_key, headers)
 
                         except KeyError as e:
 
