@@ -63,7 +63,7 @@ def main(args):
 
     if args.rate:
 
-        check_rate_limit()
+        check_rate_limit(headers)
 
     if args.query:
 
